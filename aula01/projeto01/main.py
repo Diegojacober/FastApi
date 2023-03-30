@@ -1,6 +1,10 @@
+from typing import List, Optional
+
 from fastapi import FastAPI
 from fastapi import HTTPException
 from fastapi import status
+
+from models import Curso
 app = FastAPI()
 
 cursos = {
@@ -30,6 +34,15 @@ async def get_curso(curso_id : int):
     except KeyError:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Curso não encontrado")
 
+
+@app.post("/cursos", status_code=status.HTTP_201_CREATED)
+async def post_curso(curso: Curso): #Optional[Curso] = None):
+    next_id = len(cursos) + 1
+    # curso.id = next_id
+    cursos[next_id] = curso
+    del curso.id
+    return curso
+        
 if __name__ == '__main__':
     import uvicorn
     uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
