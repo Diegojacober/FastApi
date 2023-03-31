@@ -6,6 +6,7 @@ from fastapi import status
 from fastapi.responses import JSONResponse
 from fastapi import Response
 from fastapi import Path
+from fastapi import Query
 
 from models import Curso
 app = FastAPI()
@@ -39,6 +40,25 @@ async def get_curso(curso_id : int = Path(title="ID do curso", description="Deve
     except KeyError:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Curso não encontrado")
 
+
+@app.get('/calculator/')
+async def calcular(a: int = Query(default=None, gt=5, lt=150), b: int = Query(default=None, gt=2), c: Optional[int] = None):
+    soma = a + b
+    if c:
+        soma = a + b +c
+
+    return {"resultado": soma}
+
+
+@app.post("/cursos", status_code=status.HTTP_201_CREATED)
+async def post_curso(curso: Curso): #Optional[Curso] = None):
+    next_id = len(cursos) + 1
+    # curso.id = next_id
+    cursos[next_id] = curso
+    del curso.id
+    return curso
+
+
 @app.put('/cursos/{curso_id}')
 async def put_curso(curso_id: int, curso: Curso):
     if curso_id in cursos:
@@ -57,13 +77,7 @@ async def curso_delete(curso_id: int):
     else:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Não existe o curso com o id {curso_id}")
 
-@app.post("/cursos", status_code=status.HTTP_201_CREATED)
-async def post_curso(curso: Curso): #Optional[Curso] = None):
-    next_id = len(cursos) + 1
-    # curso.id = next_id
-    cursos[next_id] = curso
-    del curso.id
-    return curso
+
         
 if __name__ == '__main__':
     import uvicorn
