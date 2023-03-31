@@ -7,9 +7,11 @@ from fastapi.responses import JSONResponse
 from fastapi import Response
 from fastapi import Path
 from fastapi import Query
+from fastapi import Header
 
 from models import Curso
 app = FastAPI()
+
 
 cursos = {
     1: {
@@ -42,11 +44,12 @@ async def get_curso(curso_id : int = Path(title="ID do curso", description="Deve
 
 
 @app.get('/calculator/')
-async def calcular(a: int = Query(default=None, gt=5, lt=150), b: int = Query(default=None, gt=2), c: Optional[int] = None):
+async def calcular(a: int = Query(default=None, gt=5, lt=150), b: int = Query(default=None, gt=2), c: Optional[int] = None, x_geek: str = Header(default=None )):
     soma = a + b
     if c:
         soma = a + b +c
 
+    print(f'X_GEEK: {x_geek}')
     return {"resultado": soma}
 
 
