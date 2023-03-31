@@ -8,7 +8,7 @@ if defined _OLD_CODEPAGE (
     "%SystemRoot%\System32\chcp.com" 65001 > nul
 )
 
-set VIRTUAL_ENV=D:\fastapi-learning\venv
+set VIRTUAL_ENV=C:\Users\57761933898\Desktop\diego\fastapi\venv
 
 if not defined PROMPT set PROMPT=$P$G
 

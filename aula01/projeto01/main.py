@@ -34,6 +34,14 @@ async def get_curso(curso_id : int):
     except KeyError:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Curso não encontrado")
 
+@app.put('/cursos/{curso_id}')
+async def put_curso(curso_id: int, curso: Curso):
+    if curso_id in cursos:
+        cursos[curso_id] = curso
+        curso.id = curso_id
+        return curso
+    else:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Não existe o cursso com o id {curso_id}")
 
 @app.post("/cursos", status_code=status.HTTP_201_CREATED)
 async def post_curso(curso: Curso): #Optional[Curso] = None):
@@ -45,4 +53,4 @@ async def post_curso(curso: Curso): #Optional[Curso] = None):
         
 if __name__ == '__main__':
     import uvicorn
-    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
+    uvicorn.run("main:app",host='127.0.0.1', port=8000, log_level="info", reload=True) 
