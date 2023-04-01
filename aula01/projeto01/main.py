@@ -56,10 +56,9 @@ async def calcular(a: int = Query(default=None, gt=5, lt=150), b: int = Query(de
 
 @app.post("/cursos", status_code=status.HTTP_201_CREATED, response_model=Curso)
 async def post_curso(curso: Curso, db: Any = Depends(fake_db)): #Optional[Curso] = None):
-    next_id = len(cursos) + 1
-    # curso.id = next_id
-    cursos[next_id] = curso
-    del curso.id
+    next_id: int = len(cursos) + 1
+    curso.id = next_id
+    cursos.append(curso)
     return curso
 
 
@@ -85,4 +84,4 @@ async def curso_delete(curso_id: int, db: Any = Depends(fake_db)):
         
 if __name__ == '__main__':
     import uvicorn
-    uvicorn.run("main:app",host='192.168.0.89', port=8000, log_level="info", reload=True) 
+    uvicorn.run("main:app",host='192.168.0.89', port=8000, log_level="info", reload=True)
