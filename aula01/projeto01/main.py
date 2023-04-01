@@ -1,4 +1,4 @@
-from typing import List, Optional, Any
+from typing import List, Optional, Any, Dict
 
 from fastapi import FastAPI
 from fastapi import HTTPException
@@ -14,6 +14,7 @@ from fastapi import Depends
 from time import sleep
 
 from models import Curso
+from models import cursos
 
 def fake_db():
     try:
@@ -23,23 +24,11 @@ def fake_db():
         print('Fechando conexão com o banco de dados')
         sleep(1)
 
-app = FastAPI()
+app = FastAPI(title="API do Diego",version="0.0.1", description="Uma API de estudos do FastApi", docs_url="/documentacao")
 
 
-cursos = {
-    1: {
-        "titulo" : "Programação com Python",
-        "aulas" : 350,
-        "horas": 195
-    },
-    2:{
-        "titulo" : "Programação com PHP",
-        "aulas" : 380,
-        "horas": 210
-    }
-}
 
-@app.get("/cursos")
+@app.get("/cursos", description="Retorno todos os cursos ou uma lista vazia", summary="Return all courses", response_model=List[Curso], response_description="Cursos encontrados com sucesso")
 async def get_cursos(db: Any = Depends(fake_db)):
     return cursos
 
@@ -50,7 +39,6 @@ async def get_curso(curso_id : int = Path(title="ID do curso", description="Deve
     try:
         curso = cursos[curso_id]
         # coloca uma nova chave chamada id e coloca o id
-        curso.update({"id": curso_id})
         return curso
     except KeyError:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Curso não encontrado")
@@ -66,7 +54,7 @@ async def calcular(a: int = Query(default=None, gt=5, lt=150), b: int = Query(de
     return {"resultado": soma}
 
 
-@app.post("/cursos", status_code=status.HTTP_201_CREATED)
+@app.post("/cursos", status_code=status.HTTP_201_CREATED, response_model=Curso)
 async def post_curso(curso: Curso, db: Any = Depends(fake_db)): #Optional[Curso] = None):
     next_id = len(cursos) + 1
     # curso.id = next_id
