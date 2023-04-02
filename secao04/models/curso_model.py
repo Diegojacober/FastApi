@@ -1,5 +1,5 @@
 
-from core.configs import  settings
+from core.configs import settings
 from sqlalchemy import Column, Integer, String
 
 class CursoModel(settings.DB_BASE_MODEL):
