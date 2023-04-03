@@ -18,8 +18,8 @@ from core.deps import get_session
 router = APIRouter()
 
 #POST curso
-@router.post('/', status_code=status.HTTP_201_CREATED, response_model=CursoSchema)
-async def post_curso(curso: CursoSchema, db: AsyncSession = Depends(get_session())):
+@router.post("/", status_code=status.HTTP_201_CREATED, response_model=CursoSchema)
+async def post_curso(curso: CursoSchema, db: AsyncSession = Depends(get_session)):
     novo_curso = CursoModel(titulo=curso.titulo,
                             aulas=curso.aulas, horas=curso.horas)
 
@@ -31,7 +31,7 @@ async def post_curso(curso: CursoSchema, db: AsyncSession = Depends(get_session(
 
 #GET cursos
 @router.get('/', response_model=List[CursoSchema])
-async def get_cursos(db: AsyncSession = Depends(get_session())):
+async def get_cursos(db: AsyncSession = Depends(get_session)):
     async with db as session:
         query = select(CursoModel)
         result = await session.execute(query)
@@ -42,7 +42,7 @@ async def get_cursos(db: AsyncSession = Depends(get_session())):
 
 #GET curso
 @router.get('/{id}', response_model=List[CursoSchema])
-async def get_curso(db: AsyncSession = Depends(get_session()), id: int = Path(title="ID do curso desejado", description="Deve ser maior que 0",gt=0)):
+async def get_curso(id: int = Path(title="ID do curso desejado", description="Deve ser maior que 0",gt=0), db: AsyncSession = Depends(get_session)):
     async with db as session:
         query = select(CursoModel).where(CursoModel.id == id)
         result = await session.execute(query)
@@ -57,7 +57,7 @@ async def get_curso(db: AsyncSession = Depends(get_session()), id: int = Path(ti
 
 #PUT curso
 @router.put('/{id}', response_model=CursoSchema, status_code=status.HTTP_202_ACCEPTED)
-async def put_curso(db: AsyncSession = Depends(get_session()), id: int = Path(title="ID do curso que deseja atualizar", description="Deve ser maior que 0",gt=0), curso: CursoSchema = Path(title="Dados atualizados do curso", description="Deve ser um JSON")):
+async def put_curso(curso: CursoSchema, id: int = Path(title="ID do curso que deseja atualizar", description="Deve ser maior que 0",gt=0), db: AsyncSession = Depends(get_session)):
     async with db as session:
         query = select(CursoModel).where(CursoModel.id == id)
         result = await session.execute(query)
@@ -78,7 +78,7 @@ async def put_curso(db: AsyncSession = Depends(get_session()), id: int = Path(ti
 
 #DELETE curso
 @router.delete('/{id}', status_code=status.HTTP_204_NO_CONTENT)
-async def delete_curso(db: AsyncSession = Depends(get_session()), id: int = Path(title="ID do curso que deseja atualizar", description="Deve ser maior que 0",gt=0)):
+async def delete_curso( id: int = Path(title="ID do curso que deseja atualizar", description="Deve ser maior que 0",gt=0), db: AsyncSession = Depends(get_session)):
     async with db as session:
         query = select(CursoModel).where(CursoModel.id == id)
         result = await session.execute(query)
