@@ -1,0 +1,1 @@
+Quando estamos utilizando o sql model não precisamos dos schemas, o próprio model vai servir para ambos
