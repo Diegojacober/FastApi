@@ -8,7 +8,7 @@ class Settings(BaseSettings):
     __USER = os.getenv('DB_USER')
     __PASS = os.getenv('DB_PASS')
     __DATABASE = os.getenv('DB_NAME')
-    API_V_STR: str = '/api/v1'
+    API_V1_STR: str = '/api/v1'
     DB_URL: str = f"mysql+asyncmy://{__USER}:{__PASS}@{__HOST}/{__DATABASE}"
     
     class Config:
