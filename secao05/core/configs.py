@@ -3,12 +3,13 @@ import os
 from dotenv import load_dotenv
 
 class Settings(BaseSettings):
-    HOST = os.getenv('DB_HOST')
-    USER = os.getenv('DB_USER')
-    PASS = os.getenv('DB_PASS')
-    DATABASE = os.getenv('DB_NAME')
+    load_dotenv()
+    __HOST = os.getenv('DB_HOST')
+    __USER = os.getenv('DB_USER')
+    __PASS = os.getenv('DB_PASS')
+    __DATABASE = os.getenv('DB_NAME')
     API_V_STR: str = '/api/v1'
-    DB_URL: str = f"mysql+asyncmy://{USER}:{PASS}@{HOST}/{DATABASE}"
+    DB_URL: str = f"mysql+asyncmy://{__USER}:{__PASS}@{__HOST}/{__DATABASE}"
     
     class Config:
         case_sensitive = True
