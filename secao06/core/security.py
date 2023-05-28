@@ -11,7 +11,7 @@ def verify_pass(password: str, hash: str) -> bool:
     return CRIPTO.verify(password, hash)
 
 
-def generate_pass_hash(password: str) -> str:
+def generate_hash_pass(password: str) -> str:
     """
     Função que gera e retorna o hash da senha
 
