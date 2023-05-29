@@ -6,6 +6,7 @@ from fastapi.responses import JSONResponse
 
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
+from sqlalchemy.exc import IntegrityError
 
 from models.artigo_model import ArtigoModel 
 from models.usuario_model import UserModel
@@ -40,11 +41,15 @@ async def post_user(user: UserSchemaCreate, db: AsyncSession = Depends(get_sessi
     )
     
     async with db as session:
-        session.add(new_user)
-        await session.commit()
+        try:
+            session.add(new_user)
+            await session.commit()
 
         
-        return new_user
+            return new_user
+        except IntegrityError as e:
+            raise HTTPException(status_code=status.HTTP_406_NOT_ACCEPTABLE,
+                                detail='Email já cadastrado')
     
 #GET usuários
 @router.get('/allusers', response_model=List[UserSchemaBase])
@@ -143,7 +148,7 @@ async def delete_user(user_id: int, db: AsyncSession = Depends(get_session), log
 # POST login
 @router.post('/login')
 async def login(form_data: OAuth2PasswordRequestForm = Depends(), db: AsyncSession = Depends(get_session)):
-    user = await authenticate(email=form_data.username, senha=form_data.password, db=db)
+    user = await authenticate(email=form_data.username, password=form_data.password, db=db)
     
     if not user:
         raise HTTPException(

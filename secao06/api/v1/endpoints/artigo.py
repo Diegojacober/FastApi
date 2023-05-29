@@ -15,7 +15,7 @@ from core.deps import get_session, get_current_user
 router = APIRouter()
 
 #POST Artigo
-@router.post('/', response_model=ArtigoModel, status_code=status.HTTP_201_CREATED)
+@router.post('/', response_model=ArtigoSchema, status_code=status.HTTP_201_CREATED)
 async def create_post(artigo: ArtigoSchema, usuario_logado: UserModel = Depends(get_current_user), db: AsyncSession = Depends(get_session)):
     novo_artigo: ArtigoModel = ArtigoModel(
         titulo=artigo.titulo,

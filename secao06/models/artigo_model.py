@@ -9,7 +9,7 @@ class ArtigoModel(settings.DB_BASEMODEL):
     id = Column(Integer, primary_key=True, autoincrement=True)
     titulo = Column(String(256))
     descricao = Column(String(256))
-    url_font: str = Column(String(256))
+    url_font = Column(String(256))
     usuario_id = Column(Integer, ForeignKey('usuarios.id'))
     criador = relationship("UserModel",
                            back_populates='artigos',
